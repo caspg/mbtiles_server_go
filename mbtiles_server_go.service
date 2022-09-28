@@ -1,0 +1,11 @@
+[Unit]
+Description=mbtiles_server_go
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart=/home/caspg/mbtiles_server_go
+
+[Install]
+WantedBy=multi-user.target

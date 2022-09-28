@@ -5,6 +5,8 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"os"
+	"path"
 	"strconv"
 
 	"github.com/gin-contrib/cors"
@@ -26,14 +28,25 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	router.GET("/ping", pingHandler)
+	router.GET("/mbtiles/ping", pingHandler)
 	router.GET("/mbtiles/:z/:x/:y", tileHandler)
 
 	router.Run(":5050")
 }
 
 func ConnectDatabase() error {
-	db, err := sql.Open("sqlite3", "./poland-bicycle-infra.mbtiles")
+	ex_path, err := os.Executable()
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	dir_path := path.Dir(ex_path)
+	db_path := path.Join(dir_path, "poland-bicycle-infra.mbtiles")
+
+	println(db_path)
+
+	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,6 +65,7 @@ func tileHandler(c *gin.Context) {
 	sqlStatement, err := DB.Prepare("SELECT tile_data FROM tiles WHERE zoom_level = ? AND tile_column = ? AND tile_row = ?")
 
 	if err != nil {
+		log.Println(err.Error())
 		internalServerError(c)
 		return
 	}
@@ -63,6 +77,7 @@ func tileHandler(c *gin.Context) {
 
 	if sqlErr != nil {
 		if sqlErr == sql.ErrNoRows {
+			log.Println(sqlErr.Error())
 			notFound(c)
 			return
 		}
