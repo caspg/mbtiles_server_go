@@ -23,5 +23,28 @@ CC=x86_64-linux-musl-gcc CXX=x86_64-linux-musl-g++ GOARCH=amd64 GOOS=linux CGO_E
 
 ## Systemd
 
-1. Copy `mbtiles_server_go.service` to `/lib/systemd/system`
-2.
+Copy `mbtiles_server_go.service` to `/lib/systemd/system`
+
+Start service
+
+```bash
+sudo service mbtiles_server_go start
+```
+
+Enable service to run on system boot
+
+```bash
+sudo systemctl enable mbtiles_server_go
+```
+
+Getting logs
+
+```bash
+sudo journalctl -u mbtiles_server_go.service -f
+```
+
+## TOOD
+
+```
+ [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ ```
