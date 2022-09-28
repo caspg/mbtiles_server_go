@@ -42,9 +42,3 @@ Getting logs
 ```bash
 sudo journalctl -u mbtiles_server_go.service -f
 ```
-
-## TOOD
-
-```
- [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
- ```
